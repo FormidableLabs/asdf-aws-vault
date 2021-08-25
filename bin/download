@@ -43,5 +43,3 @@ if [ "${extension}" == ".dmg" ]; then
 else
   chmod +x "${output_filename}"
 fi
-
-rm "${output_filename}"
