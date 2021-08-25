@@ -8,40 +8,38 @@ plugin_dir=$(dirname "$(dirname "$current_script_path")")
 # shellcheck source=../lib/utils.bash
 source "${plugin_dir}/lib/utils.bash"
 
-mkdir -p "$ASDF_DOWNLOAD_PATH"
-
-local platform arch extension filename release_file
+mkdir -p "${ASDF_DOWNLOAD_PATH}"
 
 platform="$(uname -v | tr '[:upper:]' '[:lower:]')"
 arch="$(uname -m)"
 extension=""
 
 case "$arch" in
-  # Match the goreleaser arch conventions
-  "x86_64")
-    arch="amd64"
-    ;;
+# Match the goreleaser arch conventions
+"x86_64")
+  arch="amd64"
+  ;;
 esac
 
 case "$platform" in
-  "darwin")
-    extension=".dmg"
-    ;;
-  msys*|cygwin*|mingw*|nt|win*)
-    extension=".exe"
-    ;;
+"darwin")
+  extension=".dmg"
+  ;;
+msys* | cygwin* | mingw* | nt | win*)
+  extension=".exe"
+  ;;
 esac
 
 filename="aws-vault-${platform}-${arch}${extension}"
-release_file="$ASDF_DOWNLOAD_PATH/${filename}"
+release_file="${ASDF_DOWNLOAD_PATH}/${filename}"
 
 # Download tar.gz file to the download directory
 download_release "$ASDF_INSTALL_VERSION" "$filename"
 
 if [ "${extension}" == ".dmg" ]; then
-  hdiutil mount -quiet -mountpoint $ASDF_DOWNLOAD_PATH/tmp_dmg $download_path
-  cp $ASDF_DOWNLOAD_PATH/tmp_dmg/aws-vault "${release_file}"
-  hdiutil unmount -quiet $ASDF_DOWNLOAD_PATH/tmp_dmg
+  hdiutil mount -quiet -mountpoint "${ASDF_DOWNLOAD_PATH}/tmp_dmg" "${ASDF_DOWNLOAD_PATH}"
+  cp "${ASDF_DOWNLOAD_PATH}/tmp_dmg/aws-vault" "${release_file}"
+  hdiutil unmount -quiet "${ASDF_DOWNLOAD_PATH}/tmp_dmg"
 else
   chmod +x "${release_file}"
 fi
