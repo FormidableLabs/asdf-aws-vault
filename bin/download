@@ -25,21 +25,26 @@ case "$platform" in
 "darwin")
   extension=".dmg"
   ;;
-msys* | cygwin* | mingw* | nt | win*)
-  extension=".exe"
-  ;;
 esac
 
 filename="aws-vault-${platform}-${arch}${extension}"
 output_filename="${ASDF_DOWNLOAD_PATH}/${filename}"
+target_directory="${ASDF_DOWNLOAD_PATH}/bin"
+target_filename="${target_directory}/aws-vault"
 
 # Download tar.gz file to the download directory
 download_release "$ASDF_INSTALL_VERSION" "$filename" "$output_filename"
 
+mkdir -p "${target_directory}"
+
 if [ "${extension}" == ".dmg" ]; then
+  # Adapted from:
+  # https://github.com/beardix/asdf-aws-vault/blob/master/bin/install#L42-L44
   hdiutil mount -quiet -mountpoint "${ASDF_DOWNLOAD_PATH}/tmp_dmg" "${output_filename}"
-  cp "${ASDF_DOWNLOAD_PATH}/tmp_dmg/aws-vault" "${output_filename}"
+  cp "${ASDF_DOWNLOAD_PATH}/tmp_dmg/aws-vault" "${target_filename}"
   hdiutil unmount -quiet "${ASDF_DOWNLOAD_PATH}/tmp_dmg"
 else
-  chmod +x "${output_filename}"
+  mv "${output_filename}" "${target_filename}"
 fi
+
+chmod +x "${target_filename}"
