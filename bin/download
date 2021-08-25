@@ -10,14 +10,40 @@ source "${plugin_dir}/lib/utils.bash"
 
 mkdir -p "$ASDF_DOWNLOAD_PATH"
 
-# TODO: Adapt this to proper extension and adapt extracting strategy.
-release_file="$ASDF_DOWNLOAD_PATH/$TOOL_NAME-$ASDF_INSTALL_VERSION.tar.gz"
+local platform arch extension filename release_file
+
+platform="$(uname -v | tr '[:upper:]' '[:lower:]')"
+arch="$(uname -m)"
+extension=""
+
+case "$arch" in
+  # Match the goreleaser arch conventions
+  "x86_64")
+    arch="amd64"
+    ;;
+esac
+
+case "$platform" in
+  "darwin")
+    extension=".dmg"
+    ;;
+  msys*|cygwin*|mingw*|nt|win*)
+    extension=".exe"
+    ;;
+esac
+
+filename="aws-vault-${platform}-${arch}${extension}"
+release_file="$ASDF_DOWNLOAD_PATH/${filename}"
 
 # Download tar.gz file to the download directory
-download_release "$ASDF_INSTALL_VERSION" "$release_file"
+download_release "$ASDF_INSTALL_VERSION" "$filename"
 
-#  Extract contents of tar.gz file into the download directory
-tar -xzf "$release_file" -C "$ASDF_DOWNLOAD_PATH" --strip-components=1 || fail "Could not extract $release_file"
+if [ "${extension}" == ".dmg" ]; then
+  hdiutil mount -quiet -mountpoint $ASDF_DOWNLOAD_PATH/tmp_dmg $download_path
+  cp $ASDF_DOWNLOAD_PATH/tmp_dmg/aws-vault "${release_file}"
+  hdiutil unmount -quiet $ASDF_DOWNLOAD_PATH/tmp_dmg
+else
+  chmod +x "${release_file}"
+fi
 
-# Remove the tar.gz file since we don't need to keep it
-rm "$release_file"
+rm "${release_file}"
