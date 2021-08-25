@@ -10,7 +10,7 @@ source "${plugin_dir}/lib/utils.bash"
 
 mkdir -p "${ASDF_DOWNLOAD_PATH}"
 
-platform="$(uname -v | tr '[:upper:]' '[:lower:]')"
+platform="$(uname | tr '[:upper:]' '[:lower:]')"
 arch="$(uname -m)"
 extension=""
 
