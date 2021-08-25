@@ -2,8 +2,7 @@
 
 set -euo pipefail
 
-# TODO: Ensure this is the correct GitHub homepage where releases can be downloaded for aws-vault.
-GH_REPO="https://github.com/FormidableLabs/aws-vault"
+GH_REPO="https://github.com/99designs/aws-vault"
 TOOL_NAME="aws-vault"
 TOOL_TEST="aws-vault --version"
 
@@ -31,21 +30,20 @@ list_github_tags() {
 }
 
 list_all_versions() {
-  # TODO: Adapt this. By default we simply list the tag names from GitHub releases.
-  # Change this function if aws-vault has other means of determining installable versions.
   list_github_tags
 }
 
 download_release() {
-  local version filename url
+  local version filename output_filename url
+
   version="$1"
   filename="$2"
+  output_filename="$3"
 
-  # TODO: Adapt the release URL convention for aws-vault
-  url="$GH_REPO/archive/v${version}.tar.gz"
+  url="$GH_REPO/releases/download/v${version}/${filename}"
 
   echo "* Downloading $TOOL_NAME release $version..."
-  curl "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
+  curl "${curl_opts[@]}" -o "${output_filename}" -C - "$url" || fail "Could not download $url"
 }
 
 install_version() {
@@ -61,7 +59,6 @@ install_version() {
     mkdir -p "$install_path"
     cp -r "$ASDF_DOWNLOAD_PATH"/* "$install_path"
 
-    # TODO: Asert aws-vault executable exists.
     local tool_cmd
     tool_cmd="$(echo "$TOOL_TEST" | cut -d' ' -f1)"
     test -x "$install_path/bin/$tool_cmd" || fail "Expected $install_path/bin/$tool_cmd to be executable."
