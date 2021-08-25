@@ -31,10 +31,10 @@ msys* | cygwin* | mingw* | nt | win*)
 esac
 
 filename="aws-vault-${platform}-${arch}${extension}"
-release_file="${ASDF_DOWNLOAD_PATH}/${filename}"
+output_filename="${ASDF_DOWNLOAD_PATH}/${filename}"
 
 # Download tar.gz file to the download directory
-download_release "$ASDF_INSTALL_VERSION" "$filename"
+download_release "$ASDF_INSTALL_VERSION" "$filename" "$output_filename"
 
 if [ "${extension}" == ".dmg" ]; then
   hdiutil mount -quiet -mountpoint "${ASDF_DOWNLOAD_PATH}/tmp_dmg" "${ASDF_DOWNLOAD_PATH}"
