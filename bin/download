@@ -38,10 +38,10 @@ download_release "$ASDF_INSTALL_VERSION" "$filename" "$output_filename"
 
 if [ "${extension}" == ".dmg" ]; then
   hdiutil mount -quiet -mountpoint "${ASDF_DOWNLOAD_PATH}/tmp_dmg" "${ASDF_DOWNLOAD_PATH}"
-  cp "${ASDF_DOWNLOAD_PATH}/tmp_dmg/aws-vault" "${release_file}"
+  cp "${ASDF_DOWNLOAD_PATH}/tmp_dmg/aws-vault" "${output_filename}"
   hdiutil unmount -quiet "${ASDF_DOWNLOAD_PATH}/tmp_dmg"
 else
-  chmod +x "${release_file}"
+  chmod +x "${output_filename}"
 fi
 
-rm "${release_file}"
+rm "${output_filename}"

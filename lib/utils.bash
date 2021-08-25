@@ -38,11 +38,12 @@ download_release() {
 
   version="$1"
   filename="$2"
+  output_filename="$3"
 
   url="$GH_REPO/releases/download/v${version}/${filename}"
 
   echo "* Downloading $TOOL_NAME release $version..."
-  curl "${curl_opts[@]}" -o "$output_filename" -C - "$url" || fail "Could not download $url"
+  curl "${curl_opts[@]}" -o "${output_filename}" -C - "$url" || fail "Could not download $url"
 }
 
 install_version() {
