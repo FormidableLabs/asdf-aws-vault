@@ -1,5 +1,12 @@
 # Changelog
 
+### [1.0.1](https://www.github.com/FormidableLabs/asdf-aws-vault/compare/v1.0.0...v1.0.1) (2022-01-11)
+
+
+### Bug Fixes
+
+* support aarch64 for M1 macOS and Linux ([c760aaf](https://www.github.com/FormidableLabs/asdf-aws-vault/commit/c760aafee6b1c6e7700b91c54ff3184988bed840))
+
 ## 1.0.0 (2021-08-25)
 
 
